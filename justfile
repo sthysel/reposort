@@ -33,6 +33,10 @@ check: typecheck lint
 pre-commit:
     pre-commit run --all-files
 
+[doc("Update pre-commit hook versions")]
+pre-commit-update:
+    pre-commit autoupdate
+
 [doc("Run the tool in dry-run mode")]
 dry-run:
     reposort --dry-run

@@ -103,7 +103,7 @@ def main(source: Path, target: Path, dry_run: bool) -> None:
         click.echo("\nExecuting moves...")
         click.echo("-" * 80)
 
-        for source_repo, target_repo, url in moves:
+        for source_repo, target_repo, _url in moves:
             try:
                 # Create parent directories
                 target_repo.parent.mkdir(parents=True, exist_ok=True)
