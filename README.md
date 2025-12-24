@@ -4,20 +4,22 @@ Organize git repositories by their origin URL.
 
 ## Why?
 
-If you work with many git repositories, you've probably experienced these problems:
+If you work with many git repositories, you've probably had these self-inflicted
+problems:
 
-- **Scattered repositories**: Repos cloned into random directories (`~/Downloads`, `~/Desktop`, `~/tmp/test123`)
+- **Scattered repositories**: Repos cloned into random directories (`~/workspace`, `~/stufs`, `~/tmp/test123`)
 - **Hard to find projects**: No consistent structure makes it difficult to locate specific repositories
 - **Duplicate clones**: Multiple copies of the same repo in different locations
 - **Mixed sources**: Repos from GitHub, GitLab, BitBucket, and private servers all jumbled together
 - **Lost context**: Directory names don't reflect the organization or team that owns the repo
 
-`reposort` solves this by automatically organizing all your git repositories based on their remote origin URL, creating a predictable, hierarchical structure that mirrors the source hosting:
+`reposort` solves this by automatically organizing all your git repositories
+based on their remote origin URL, creating a predictable, hierarchical structure
+that mirrors the source hosting:
 
 ```
 ~/code/
 ├── github.com/
-│   ├── kubernetes/kubernetes
 │   ├── torvalds/linux
 │   └── youruser/yourproject
 ├── gitlab.com/
@@ -28,13 +30,15 @@ If you work with many git repositories, you've probably experienced these proble
 ```
 
 This structure makes it easy to:
-- Find any repository instantly
+- Find a repository in context
 - Understand where a project comes from at a glance
 - Avoid duplicate clones
 - Navigate related projects from the same organization
 - Script operations across repositories by host or team
 
-**Tip**: While this organization provides a clean canonical structure, you can maintain a "linkfarm" of symbolic links to frequently used repositories or project groups for quick access:
+**Tip**: While this organization provides a clean canonical structure, you can
+maintain a "linkfarm" of symbolic links to frequently used repositories or
+project groups for quick access:
 
 ```bash
 ~/active/
@@ -50,7 +54,7 @@ This gives you both: a well-organized source of truth and convenient shortcuts f
 Using uv:
 
 ```bash
-uv pip install -e .
+uv sync
 ```
 
 Or install with development dependencies:
