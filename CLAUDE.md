@@ -41,15 +41,22 @@ python -m reposort --dry-run
 
 ## Code Quality Commands
 
-```bash
-# Type checking with mypy (strict mode enabled)
-mypy src/reposort
+The project includes a `justfile` for running common tasks:
 
-# Linting and formatting with ruff
+```bash
+# Recommended: Use just commands
+just check           # Run type checking + linting
+just typecheck       # Run mypy
+just lint            # Run ruff linter
+just format          # Format code with ruff
+just fix             # Auto-fix linting issues
+just pre-commit      # Run all pre-commit hooks
+just setup           # Install deps + setup pre-commit
+
+# Manual commands (if not using just)
+mypy src/reposort
 ruff check src/reposort
 ruff format src/reposort
-
-# Or let pre-commit run everything
 pre-commit run --all-files
 ```
 

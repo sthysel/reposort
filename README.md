@@ -81,6 +81,41 @@ Transforms repositories like:
 
 ## Development
 
+### Quick Start with just
+
+This project includes a `justfile` for common development tasks:
+
+```bash
+# Set up dev environment (install deps + pre-commit hooks)
+just setup
+
+# Run type checking
+just typecheck
+
+# Run linting
+just lint
+
+# Auto-fix linting issues
+just fix
+
+# Format code
+just format
+
+# Run all checks
+just check
+
+# Run pre-commit hooks on all files
+just pre-commit
+
+# Clean build artifacts
+just clean
+
+# See all available commands
+just --list
+```
+
+### Manual Commands
+
 Install development dependencies:
 
 ```bash

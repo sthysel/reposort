@@ -1,0 +1,47 @@
+[doc("Show available commands")]
+help:
+    @just --list
+
+[doc("Install package with dev dependencies")]
+install:
+    uv sync
+
+[doc("Set up pre-commit hooks")]
+setup: install
+    pre-commit install
+
+[doc("Run type checking with mypy")]
+typecheck:
+    mypy src/reposort
+
+[doc("Run ruff linter")]
+lint:
+    ruff check src/reposort
+
+[doc("Run ruff formatter")]
+format:
+    ruff format src/reposort
+
+[doc("Fix linting issues automatically")]
+fix:
+    ruff check --fix src/reposort
+
+[doc("Run all checks (type checking + linting)")]
+check: typecheck lint
+
+[doc("Run all pre-commit hooks on all files")]
+pre-commit:
+    pre-commit run --all-files
+
+[doc("Run the tool in dry-run mode")]
+dry-run:
+    reposort --dry-run
+
+[doc("Run the tool")]
+run *ARGS:
+    reposort {{ARGS}}
+
+[doc("Clean up build artifacts and cache")]
+clean:
+    rm -rf build/ dist/ *.egg-info .mypy_cache/ .ruff_cache/ .pytest_cache/
+    find . -type d -name __pycache__ -exec rm -rf {} +
