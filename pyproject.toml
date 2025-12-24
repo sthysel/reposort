@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Organize git repositories by their origin URL"
 authors = [{ name = "thys", email = "thys@example.com" }]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
     "click>=8.1.7",
 ]
@@ -28,7 +28,7 @@ packages = ["src/reposort"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py313"
 src = ["src"]
 
 [tool.ruff.lint]
@@ -50,7 +50,7 @@ quote-style = "double"
 indent-style = "space"
 
 [tool.mypy]
-python_version = "3.11"
+python_version = "3.13"
 strict = true
 warn_return_any = true
 warn_unused_configs = true
