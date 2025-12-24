@@ -57,11 +57,7 @@ Using uv:
 uv sync
 ```
 
-Or install with development dependencies:
-
-```bash
-uv pip install -e ".[dev]"
-```
+This will create a virtual environment, install the package in editable mode, and install all dependencies (including dev dependencies from the lockfile).
 
 ## Usage
 
@@ -120,10 +116,10 @@ just --list
 
 ### Manual Commands
 
-Install development dependencies:
+Install dependencies:
 
 ```bash
-uv pip install -e ".[dev]"
+uv sync
 ```
 
 Set up pre-commit hooks:
