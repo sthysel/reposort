@@ -100,6 +100,11 @@ def main(source: Path, target: Path, dry_run: bool) -> None:
     if dry_run:
         click.echo("\n[DRY RUN] No changes made. Run without --dry-run to execute.")
     else:
+        click.echo()
+        if not click.confirm("Proceed with moving repositories?", default=False):
+            click.echo("Aborted.")
+            return
+
         click.echo("\nExecuting moves...")
         click.echo("-" * 80)
 
