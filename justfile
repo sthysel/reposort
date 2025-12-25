@@ -10,9 +10,9 @@ install:
 setup: install
     pre-commit install
 
-[doc("Run type checking with mypy")]
+[doc("Run type checking with ty")]
 typecheck:
-    mypy src/reposort
+    ty check src/reposort
 
 [doc("Run ruff linter")]
 lint:

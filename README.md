@@ -131,7 +131,7 @@ pre-commit install
 Run type checking:
 
 ```bash
-mypy src/reposort
+ty check src/reposort
 ```
 
 Run formatting and linting:

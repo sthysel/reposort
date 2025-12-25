@@ -16,9 +16,7 @@ repos:
         args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.1
+  - repo: https://github.com/astral-sh/ty-pre-commit
+    rev: v0.1.0
     hooks:
-      - id: mypy
-        additional_dependencies: [click]
-        args: [--strict]
+      - id: ty

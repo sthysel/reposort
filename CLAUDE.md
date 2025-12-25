@@ -17,9 +17,9 @@ This project uses `uv` for dependency management:
 
 ```bash
 # Install the package in editable mode with dev dependencies
-uv pip install -e ".[dev]"
+uv sync
 
-# Set up pre-commit hooks (runs ruff and mypy automatically)
+# Set up pre-commit hooks (runs ruff and ty automatically)
 pre-commit install
 ```
 
@@ -46,7 +46,7 @@ The project includes a `justfile` for running common tasks:
 ```bash
 # Recommended: Use just commands
 just check           # Run type checking + linting
-just typecheck       # Run mypy
+just typecheck       # Run ty
 just lint            # Run ruff linter
 just format          # Format code with ruff
 just fix             # Auto-fix linting issues
@@ -54,7 +54,7 @@ just pre-commit      # Run all pre-commit hooks
 just setup           # Install deps + setup pre-commit
 
 # Manual commands (if not using just)
-mypy src/reposort
+ty check src/reposort
 ruff check src/reposort
 ruff format src/reposort
 pre-commit run --all-files
@@ -88,8 +88,8 @@ The CLI (`cli.py`) orchestrates these functions:
 
 ## Key Implementation Details
 
-- **Type hints**: Fully typed codebase using Python 3.11+ syntax (`str | None` instead of `Optional[str]`)
+- **Type hints**: Fully typed codebase using Python 3.13+ syntax (`str | None` instead of `Optional[str]`)
 - **URL parsing order is critical**: `ssh://` URLs must be checked before SSH shorthand to avoid misparse (see `parse_git_url()` in core.py:44)
 - **Conflict handling**: Uses numerical suffixes (`-copy1`, `-copy2`) rather than overwriting existing directories
 - **Error handling**: Repos without origin URLs or unparseable URLs are skipped and reported
-- **Pre-commit hooks**: Automatically runs ruff (formatting + linting) and mypy (type checking) on commit
+- **Pre-commit hooks**: Automatically runs ruff (formatting + linting) and ty (type checking) on commit
