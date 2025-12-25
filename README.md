@@ -1,4 +1,4 @@
-# reposort v0.1.0
+# reposort v0.1.1
 
 Organize git repositories by their origin URL.
 
