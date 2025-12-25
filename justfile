@@ -49,3 +49,15 @@ run *ARGS:
 clean:
     rm -rf build/ dist/ *.egg-info .mypy_cache/ .ruff_cache/ .pytest_cache/
     find . -type d -name __pycache__ -exec rm -rf {} +
+
+[doc("Bump patch version (0.0.X)")]
+bump-patch:
+    bump-my-version bump patch
+
+[doc("Bump minor version (0.X.0)")]
+bump-minor:
+    bump-my-version bump minor
+
+[doc("Bump major version (X.0.0)")]
+bump-major:
+    bump-my-version bump major

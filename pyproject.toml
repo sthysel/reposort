@@ -2,7 +2,7 @@
 name = "reposort"
 version = "0.1.0"
 description = "Organize git repositories by their origin URL"
-authors = [{ name = "thys", email = "thys@example.com" }]
+authors = [{ name = "thys", email = "sthysel@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -50,9 +50,32 @@ include = ["src"]
 [tool.ty.terminal]
 error-on-warning = true
 
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+message = "Bump version: {current_version} → {new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = "version = \"{current_version}\""
+replace = "version = \"{new_version}\""
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "# reposort"
+replace = "# reposort v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "README.md"
+search = "# reposort v{current_version}"
+replace = "# reposort v{new_version}"
+
 [dependency-groups]
 dev = [
     "ty>=0.0.7",
     "pre-commit>=3.6.0",
     "ruff>=0.2.0",
+    "bump-my-version>=0.26.0",
 ]
