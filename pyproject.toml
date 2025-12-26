@@ -1,6 +1,6 @@
 [project]
 name = "reposort"
-version = "0.1.2"
+version = "0.1.3"
 description = "Organize git repositories by their origin URL"
 authors = [{ name = "thys", email = "sthysel@gmail.com" }]
 readme = "README.md"
@@ -51,7 +51,7 @@ include = ["src"]
 error-on-warning = true
 
 [tool.bumpversion]
-current_version = "0.1.2"
+current_version = "0.1.3"
 commit = true
 tag = true
 tag_name = "v{new_version}"
