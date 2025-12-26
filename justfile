@@ -1,3 +1,6 @@
+set shell := ["bash", "-c"]
+set export
+
 [doc("Show available commands")]
 help:
     @just --list
@@ -49,6 +52,13 @@ run *ARGS:
 clean:
     rm -rf build/ dist/ *.egg-info .mypy_cache/ .ruff_cache/ .pytest_cache/
     find . -type d -name __pycache__ -exec rm -rf {} +
+
+[doc("Debug: Show which bump-my-version will be used")]
+debug-bump:
+    which bump-my-version
+    bump-my-version --version
+    echo "VIRTUAL_ENV=$VIRTUAL_ENV"
+    echo "PWD=$PWD"
 
 [doc("Bump patch version (0.0.X)")]
 bump-patch:
