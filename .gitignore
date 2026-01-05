@@ -53,3 +53,5 @@ dmypy.json
 
 # Ruff
 .ruff_cache/
+
+CLAUDE.md
