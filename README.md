@@ -86,23 +86,16 @@ uvx reposort --dry-run
 
 ``` sh
 $ reposort --help
-Usage: reposort [OPTIONS]
+Usage: reposort [OPTIONS] COMMAND [ARGS]...
 
   Organize git repositories by their origin URL.
 
-  Examples:   reposort --dry-run     Show what would be moved without making
-  changes
-
-    reposort     Execute the repository reorganization
-
-    reposort --source /path/to/repos --target ~/projects     Organize repos
-    from custom source to custom target
+Commands:
+  clone  Clone a repository and organize it by its origin URL.
+  sort   Sort existing repositories by their origin URL.
 
 Options:
-  --source DIRECTORY  Source directory containing git repositories
-  --target PATH       Target base directory
-  --dry-run           Show what would be done without making changes
-  --help              Show this message and exit.
+  --help  Show this message and exit.
 ```
 
 
@@ -120,20 +113,81 @@ This will create a virtual environment, install the package in editable mode, an
 
 ## Usage
 
+### Sorting Existing Repositories
+
+Organize existing git repositories on your filesystem:
+
 ```bash
-# Dry-run to preview changes
+# Dry-run to preview changes (default command)
 reposort --dry-run
+reposort sort --dry-run
 
 # Execute the reorganization (default: searches current dir, targets ~/code)
 reposort
+reposort sort
 
 # Custom source and target directories
-reposort --source /path/to/repos --target ~/projects
+reposort sort --source /path/to/repos --target ~/projects
 ```
+
+### Cloning New Repositories
+
+Clone repositories directly into the organized structure:
+
+```bash
+# Clone to the organized location (dry-run first to see where it goes)
+reposort clone https://github.com/user/repo.git --dry-run
+
+# Actually clone the repository
+reposort clone https://github.com/user/repo.git
+
+# Clone with SSH URL
+reposort clone git@github.com:user/repo.git
+
+# Clone to a custom target directory
+reposort clone git@github.com:user/repo.git --target ~/projects
+```
+
+This automatically clones to `~/code/github.com/user/repo` (or your custom target), maintaining the same organizational structure as the sort command.
 
 ## Examples
 
-Transforms repositories like:
+### Sorting Existing Repos
+
+Move scattered repositories into organized structure:
+
+```bash
+# Before: repos scattered everywhere
+~/workspace/my-project/
+~/Downloads/temp-repo/
+~/code/random-clone/
+
+# Run reposort
+reposort
+
+# After: organized by origin URL
+~/code/github.com/user/my-project/
+~/code/github.com/user/temp-repo/
+~/code/gitlab.com/team/random-clone/
+```
+
+### Cloning New Repos
+
+Clone directly into organized structure:
+
+```bash
+# Traditional approach
+git clone git@github.com:user/repo.git
+cd repo
+
+# With reposort - automatically organized!
+reposort clone git@github.com:user/repo.git
+cd ~/code/github.com/user/repo
+```
+
+### URL Transformations
+
+Both commands handle various git URL formats:
 - `git@github.com:user/repo.git` → `~/code/github.com/user/repo`
 - `ssh://git@host:7999/team/project.git` → `~/code/host/team/project`
 - `https://github.com/user/repo.git` → `~/code/github.com/user/repo`
