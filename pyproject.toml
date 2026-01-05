@@ -10,7 +10,7 @@ dependencies = [
 ]
 
 [project.scripts]
-reposort = "reposort.cli:main"
+reposort = "reposort.cli:cli"
 
 [build-system]
 requires = ["hatchling"]

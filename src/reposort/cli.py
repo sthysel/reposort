@@ -1,14 +1,31 @@
 """Click CLI for reposort."""
 
 import shutil
+import subprocess
 from pathlib import Path
 
 import click
 
-from reposort.core import find_git_repos, get_git_origin_url, get_unique_target_path, parse_git_url
+from reposort.core import (
+    clone_repository,
+    find_git_repos,
+    get_git_origin_url,
+    get_unique_target_path,
+    parse_git_url,
+)
+
+CONTEXT_SETTINGS = {"max_content_width": 200}
 
 
-@click.command()
+@click.group(invoke_without_command=True, context_settings=CONTEXT_SETTINGS)
+@click.pass_context
+def cli(ctx: click.Context) -> None:
+    """Organize git repositories by their origin URL."""
+    if ctx.invoked_subcommand is None:
+        ctx.invoke(sort)
+
+
+@cli.command()
 @click.option(
     "--source",
     type=click.Path(exists=True, file_okay=False, path_type=Path),
@@ -26,19 +43,22 @@ from reposort.core import find_git_repos, get_git_origin_url, get_unique_target_
     is_flag=True,
     help="Show what would be done without making changes",
 )
-def main(source: Path, target: Path, dry_run: bool) -> None:
+def sort(source: Path, target: Path, dry_run: bool) -> None:
     """
-    Organize git repositories by their origin URL.
+    Sort existing repositories by their origin URL.
 
+    \b
     Examples:
-      reposort --dry-run
-        Show what would be moved without making changes
+      # Show what would be moved
+      $ reposort --dry-run
 
-      reposort
-        Execute the repository reorganization
+    \b
+      # Execute the reorganization
+      $ reposort
 
-      reposort --source /path/to/repos --target ~/projects
-        Organize repos from custom source to custom target
+    \b
+      # Use custom source and target directories
+      $ reposort --source /path/to/repos --target ~/projects
     """
     source = source.resolve()
     target = target.expanduser().resolve()
@@ -122,5 +142,87 @@ def main(source: Path, target: Path, dry_run: bool) -> None:
         click.echo("\nDone!")
 
 
+@cli.command()
+@click.argument("url")
+@click.option(
+    "--target",
+    type=click.Path(path_type=Path),
+    default=Path("~/code"),
+    help="Target base directory",
+)
+@click.option(
+    "--dry-run",
+    is_flag=True,
+    help="Show where the repository would be cloned without executing",
+)
+def clone(url: str, target: Path, dry_run: bool) -> None:
+    """
+    Clone a repository and organize it by its origin URL.
+
+    \b
+    Examples:
+      # Clones to ~/code/github.com/user/repo
+      $ reposort clone git@github.com:user/repo.git
+
+    \b
+      # Shows where it would be cloned without executing
+      $ reposort clone https://github.com/user/repo.git --dry-run
+
+    \b
+      # Clones to ~/projects/github.com/user/repo
+      $ reposort clone git@github.com:user/repo.git --target ~/projects
+    """
+    target = target.expanduser().resolve()
+
+    # Parse the URL to determine target path
+    parsed = parse_git_url(url)
+    if not parsed:
+        click.echo(f"Error: Could not parse git URL: {url}", err=True)
+        raise click.Abort()
+
+    host, path = parsed
+    target_path = target / host / path
+
+    # Handle path conflicts
+    final_target = get_unique_target_path(target_path)
+
+    # Display plan
+    click.echo("Clone plan:")
+    click.echo("-" * 80)
+    click.echo(f"  URL: {url}")
+    click.echo(f"  Target: {final_target}")
+
+    if final_target != target_path:
+        click.echo(f"  [CONFLICT - target already exists, using {final_target.name}]")
+    click.echo()
+
+    # Execute or show dry-run message
+    if dry_run:
+        click.echo("[DRY RUN] No changes made. Run without --dry-run to execute.")
+        return
+
+    # Execute the clone
+    click.echo("Cloning...")
+    click.echo("-" * 80)
+
+    try:
+        # Create parent directories
+        final_target.parent.mkdir(parents=True, exist_ok=True)
+
+        # Clone the repository
+        clone_repository(url, final_target)
+
+        click.echo(f"✓ Successfully cloned to {final_target}")
+
+    except subprocess.CalledProcessError as e:
+        click.echo("✗ Failed to clone repository", err=True)
+        if e.stderr:
+            click.echo(f"Git error: {e.stderr}", err=True)
+        raise click.Abort() from e
+    except OSError as e:
+        click.echo(f"✗ File system error: {e}", err=True)
+        raise click.Abort() from e
+
+
 if __name__ == "__main__":
-    main()
+    cli()

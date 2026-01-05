@@ -20,6 +20,28 @@ def get_git_origin_url(repo_path: Path) -> str | None:
         return None
 
 
+def clone_repository(url: str, target_path: Path) -> subprocess.CompletedProcess:
+    """
+    Clone a git repository to the specified path.
+
+    Args:
+        url: Git repository URL to clone
+        target_path: Destination path for the cloned repository
+
+    Returns:
+        subprocess.CompletedProcess with result of git clone
+
+    Raises:
+        subprocess.CalledProcessError: If git clone fails
+    """
+    return subprocess.run(
+        ["git", "clone", url, str(target_path)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+
 def parse_git_url(url: str) -> tuple[str, str] | None:
     """
     Parse a git URL and extract host and path.
