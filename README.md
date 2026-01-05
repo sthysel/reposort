@@ -51,7 +51,23 @@ This gives you both: a well-organized source of truth and convenient shortcuts f
 
 ## Installation
 
-Using uv:
+### For Users
+
+Install as a tool using uv:
+
+```bash
+# Install globally as a tool
+uv tool install reposort
+
+# Or run directly without installation
+uvx reposort --dry-run
+```
+
+Using `uvx` is convenient for one-off runs or trying the tool without installing it. The tool will be downloaded and cached automatically.
+
+### For Development
+
+Clone the repository and install in editable mode:
 
 ```bash
 uv sync
