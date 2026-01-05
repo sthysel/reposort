@@ -74,7 +74,7 @@ This gives you both a well-organised source of truth and convenient shortcuts fo
 
 ### For Users
 
-Install as a tool using uv:
+`reposort` is in pypi, install as a tool using uv:
 
 ```bash
 # Install globally as a tool
@@ -83,6 +83,28 @@ uv tool install reposort
 # Or run directly without installation
 uvx reposort --dry-run
 ```
+
+``` sh
+$ reposort --help
+Usage: reposort [OPTIONS]
+
+  Organize git repositories by their origin URL.
+
+  Examples:   reposort --dry-run     Show what would be moved without making
+  changes
+
+    reposort     Execute the repository reorganization
+
+    reposort --source /path/to/repos --target ~/projects     Organize repos
+    from custom source to custom target
+
+Options:
+  --source DIRECTORY  Source directory containing git repositories
+  --target PATH       Target base directory
+  --dry-run           Show what would be done without making changes
+  --help              Show this message and exit.
+```
+
 
 Using `uvx` is convenient for one-off runs or trying the tool without installing it. The tool will be downloaded and cached automatically.
 
