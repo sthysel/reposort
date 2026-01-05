@@ -16,7 +16,11 @@ repos:
         args: [--fix]
       - id: ruff-format
 
-  - repo: https://github.com/astral-sh/ty-pre-commit
-    rev: v0.1.0
+  - repo: local
     hooks:
       - id: ty
+        name: ty
+        entry: ty check src/reposort
+        language: system
+        pass_filenames: false
+        always_run: true
