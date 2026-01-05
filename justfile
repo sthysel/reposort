@@ -53,12 +53,8 @@ clean:
     rm -rf build/ dist/ *.egg-info .mypy_cache/ .ruff_cache/ .pytest_cache/
     find . -type d -name __pycache__ -exec rm -rf {} +
 
-[doc("Debug: Show which bump-my-version will be used")]
-debug-bump:
-    which bump-my-version
-    bump-my-version --version
-    echo "VIRTUAL_ENV=$VIRTUAL_ENV"
-    echo "PWD=$PWD"
+[doc("Clean and rebuild")]
+rebuild: clean build
 
 [doc("Bump patch version (0.0.X)")]
 bump-patch:
@@ -71,3 +67,15 @@ bump-minor:
 [doc("Bump major version (X.0.0)")]
 bump-major:
     bump-my-version bump major
+
+[doc("Build wheel and sdist")]
+build:
+    uv build
+
+[doc("Publish to PyPI")]
+publish:
+    uv publish
+
+[doc("Publish to TestPyPI")]
+publish-test:
+    uv publish --publish-url https://test.pypi.org/legacy/
