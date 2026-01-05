@@ -4,8 +4,7 @@ Organize git repositories by their origin URL.
 
 ## Why?
 
-If you work with many git repositories, you've probably had these self-inflicted
-problems:
+If you work with many git repositories, you've probably inflicted these problems on yourself:
 
 - **Scattered repositories**: Repos cloned into random directories (`~/workspace`, `~/stufs`, `~/tmp/test123`)
 - **Hard to find projects**: No consistent structure makes it difficult to locate specific repositories
@@ -13,20 +12,42 @@ problems:
 - **Mixed sources**: Repos from GitHub, GitLab, BitBucket, and private servers all jumbled together
 - **Lost context**: Directory names don't reflect the organization or team that owns the repo
 
-`reposort` solves this by automatically organizing all your git repositories
+`reposort` fixes your shit by automatically organizing all your git repositories
 based on their remote origin URL, creating a predictable, hierarchical structure
 that mirrors the source hosting:
 
 ```
 ~/code/
+├── aur.archlinux.org/
+│   └── weewx/
+├── bitbucket.org/
+│   ├── bhptechsi/
+│   └── ccgmurdoch/
 ├── github.com/
-│   ├── torvalds/linux
-│   └── youruser/yourproject
+│   ├── apple/
+│   ├── astar-ai/
+│   ├── ...
+│   ├── sthysel/
+│   ├── sthysel-freight/
+│   ├── sthyselfreight/
+│   ├── sthysel-shop/
+│   ├── sthyselzsh/
+│   └── windwp/
 ├── gitlab.com/
-│   └── yourteam/backend
-└── git.company.com/
-    ├── platform/api
-    └── platform/frontend
+│   ├── bhp-cloudfactory/
+│   └── vasdee/
+├── sdappsgit.bhp.com/
+│   ├── iabs/
+│   └── mag/
+├── sdappsgit.ent.bhpbilliton.net/
+│   ├── ddl/
+│   ├── hdl/
+│   ├── ...
+│   ├── scm/
+│   ├── toc/
+│   └── wts/
+└── ssh.dev.azure.com/
+    └── v3/
 ```
 
 This structure makes it easy to:
