@@ -68,7 +68,7 @@ project groups for quick access:
 └── dotfiles -> ~/code/github.com/me/dotfiles
 ```
 
-This gives you both: a well-organized source of truth and convenient shortcuts for active work.
+This gives you both a well-organised source of truth and convenient shortcuts for active work.
 
 ## Installation
 
