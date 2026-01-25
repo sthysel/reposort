@@ -1,4 +1,4 @@
-"""Core functionality for organizing git repositories."""
+"""Core functionality for organising git repositories."""
 
 import re
 import subprocess
@@ -20,13 +20,17 @@ def get_git_origin_url(repo_path: Path) -> str | None:
         return None
 
 
-def clone_repository(url: str, target_path: Path) -> subprocess.CompletedProcess:
+def clone_repository(
+    url: str, target_path: Path, *, no_fsck: bool = False
+) -> subprocess.CompletedProcess:
     """
     Clone a git repository to the specified path.
 
     Args:
         url: Git repository URL to clone
         target_path: Destination path for the cloned repository
+        no_fsck: If True, disable fsck checks during clone (useful for repos with
+            malformed objects like invalid submodule URLs)
 
     Returns:
         subprocess.CompletedProcess with result of git clone
@@ -34,8 +38,13 @@ def clone_repository(url: str, target_path: Path) -> subprocess.CompletedProcess
     Raises:
         subprocess.CalledProcessError: If git clone fails
     """
+    cmd = ["git"]
+    if no_fsck:
+        cmd.extend(["-c", "transfer.fsckObjects=false"])
+    cmd.extend(["clone", url, str(target_path)])
+
     return subprocess.run(
-        ["git", "clone", url, str(target_path)],
+        cmd,
         capture_output=True,
         text=True,
         check=True,
@@ -94,7 +103,6 @@ def parse_git_url(url: str) -> tuple[str, str] | None:
         # Remove trailing slashes
         path = path.rstrip("/")
         return (host, path)
-
     return None
 
 

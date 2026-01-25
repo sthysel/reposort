@@ -155,7 +155,12 @@ def sort(source: Path, target: Path, dry_run: bool) -> None:
     is_flag=True,
     help="Show where the repository would be cloned without executing",
 )
-def clone(url: str, target: Path, dry_run: bool) -> None:
+@click.option(
+    "--no-fsck",
+    is_flag=True,
+    help="Disable fsck checks during clone (for repos with malformed objects)",
+)
+def clone(url: str, target: Path, dry_run: bool, no_fsck: bool) -> None:
     """
     Clone a repository and organize it by its origin URL.
 
@@ -210,7 +215,7 @@ def clone(url: str, target: Path, dry_run: bool) -> None:
         final_target.parent.mkdir(parents=True, exist_ok=True)
 
         # Clone the repository
-        clone_repository(url, final_target)
+        clone_repository(url, final_target, no_fsck=no_fsck)
 
         click.echo(f"✓ Successfully cloned to {final_target}")
 
