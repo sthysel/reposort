@@ -171,13 +171,13 @@ reposort tree --target ~/projects
 **Table view (`list`)** shows a detailed table with columns for host, path, branch, status (clean/dirty), and remote URL:
 
 ```
-┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Host         ┃ Path           ┃ Branch ┃ Status ┃ Remote URL                ┃
-┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ github.com   │ sthysel/repo   │ main   │ clean  │ git@github.com:sthysel/…  │
-│ github.com   │ other/project  │ develop│ dirty  │ git@github.com:other/pr…  │
-│ gitlab.com   │ team/service   │ main   │ clean  │ git@gitlab.com:team/ser…  │
-└──────────────┴────────────────┴────────┴────────┴───────────────────────────┘
++--------------+----------------+---------+--------+---------------------------+
+| Host         | Path           | Branch  | Status | Remote URL                |
++--------------+----------------+---------+--------+---------------------------+
+| github.com   | sthysel/repo   | main    | clean  | git@github.com:sthysel/.. |
+| github.com   | other/project  | develop | dirty  | git@github.com:other/...  |
+| gitlab.com   | team/service   | main    | clean  | git@gitlab.com:team/se... |
++--------------+----------------+---------+--------+---------------------------+
 ```
 
 **Tree view (`tree`)** shows a hierarchical view organized by host and owner:
