@@ -160,8 +160,14 @@ View your organized repositories with the `list` and `tree` commands:
 # Table view with host, path, branch, status, and remote URL
 reposort list
 
+# Show only dirty repositories (uncommitted changes)
+reposort list --dirty
+
 # Tree view organized by host
 reposort tree
+
+# Tree view showing only dirty repositories
+reposort tree --dirty
 
 # View repositories in a custom directory
 reposort list --target ~/projects

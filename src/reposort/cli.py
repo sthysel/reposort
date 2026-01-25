@@ -242,7 +242,12 @@ def clone(url: str, target: Path, dry_run: bool, no_fsck: bool) -> None:
     default=Path("~/code"),
     help="Base directory containing organized repositories",
 )
-def list_repos(target: Path) -> None:
+@click.option(
+    "--dirty",
+    is_flag=True,
+    help="Show only repositories with uncommitted changes",
+)
+def list_repos(target: Path, dirty: bool) -> None:
     """
     List all repositories in a table view.
 
@@ -251,6 +256,7 @@ def list_repos(target: Path) -> None:
     \b
     Examples:
       $ reposort list
+      $ reposort list --dirty
       $ reposort list --target ~/projects
     """
     target = target.expanduser().resolve()
@@ -261,15 +267,20 @@ def list_repos(target: Path) -> None:
 
     repos = collect_repo_info(target)
 
+    if dirty:
+        repos = [r for r in repos if r.dirty]
+
     if not repos:
-        click.echo(f"No git repositories found in {target}")
+        msg = "No dirty repositories found" if dirty else "No git repositories found"
+        click.echo(f"{msg} in {target}")
         return
 
     # Sort repos by host, then by path
     repos.sort(key=lambda r: (r.host, r.repo_path))
 
     console = Console()
-    table = Table(title=f"Repositories in {target}")
+    title = f"Dirty repositories in {target}" if dirty else f"Repositories in {target}"
+    table = Table(title=title)
 
     table.add_column("Host", style="cyan")
     table.add_column("Path", style="green")
@@ -294,13 +305,19 @@ def list_repos(target: Path) -> None:
     default=Path("~/code"),
     help="Base directory containing organized repositories",
 )
-def tree_repos(target: Path) -> None:
+@click.option(
+    "--dirty",
+    is_flag=True,
+    help="Show only repositories with uncommitted changes",
+)
+def tree_repos(target: Path, dirty: bool) -> None:
     """
     Display repositories in a tree view organized by host.
 
     \b
     Examples:
       $ reposort tree
+      $ reposort tree --dirty
       $ reposort tree --target ~/projects
     """
     target = target.expanduser().resolve()
@@ -311,8 +328,12 @@ def tree_repos(target: Path) -> None:
 
     repos = collect_repo_info(target)
 
+    if dirty:
+        repos = [r for r in repos if r.dirty]
+
     if not repos:
-        click.echo(f"No git repositories found in {target}")
+        msg = "No dirty repositories found" if dirty else "No git repositories found"
+        click.echo(f"{msg} in {target}")
         return
 
     # Organize repos by host and path hierarchy
@@ -327,7 +348,8 @@ def tree_repos(target: Path) -> None:
             host_tree[repo.host][""].append(repo)
 
     console = Console()
-    tree = Tree(f"[bold]{target}[/bold]")
+    title = f"[bold]{target}[/bold] [dim](dirty only)[/dim]" if dirty else f"[bold]{target}[/bold]"
+    tree = Tree(title)
 
     for host in sorted(host_tree.keys()):
         host_branch = tree.add(f"[cyan]{host}/[/cyan]")
