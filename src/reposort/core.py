@@ -2,6 +2,7 @@
 
 import re
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -133,3 +134,91 @@ def get_unique_target_path(base_target: Path) -> Path:
         if not new_target.exists():
             return new_target
         counter += 1
+
+
+def get_repo_branch(repo_path: Path) -> str | None:
+    """Get the current branch name of a git repository."""
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(repo_path), "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError:
+        return None
+
+
+def get_repo_status(repo_path: Path) -> bool:
+    """Check if a git repository has uncommitted changes (is dirty).
+
+    Returns True if dirty (uncommitted changes), False if clean.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(repo_path), "status", "--porcelain"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return bool(result.stdout.strip())
+    except subprocess.CalledProcessError:
+        return False
+
+
+@dataclass
+class RepoInfo:
+    """Information about a git repository."""
+
+    path: Path
+    host: str
+    repo_path: str
+    branch: str | None
+    dirty: bool
+    remote_url: str | None
+
+
+def collect_repo_info(base_path: Path) -> list[RepoInfo]:
+    """Scan a directory and collect information about all git repositories.
+
+    Args:
+        base_path: The base directory to scan (e.g., ~/code)
+
+    Returns:
+        List of RepoInfo objects for each repository found
+    """
+    repos = find_git_repos(base_path)
+    repo_infos: list[RepoInfo] = []
+
+    for repo in repos:
+        remote_url = get_git_origin_url(repo)
+        branch = get_repo_branch(repo)
+        dirty = get_repo_status(repo)
+
+        # Try to extract host and path from directory structure
+        try:
+            rel_path = repo.relative_to(base_path)
+            parts = rel_path.parts
+            if len(parts) >= 2:
+                host = parts[0]
+                repo_path_str = "/".join(parts[1:])
+            else:
+                host = "unknown"
+                repo_path_str = str(rel_path)
+        except ValueError:
+            host = "unknown"
+            repo_path_str = repo.name
+
+        repo_infos.append(
+            RepoInfo(
+                path=repo,
+                host=host,
+                repo_path=repo_path_str,
+                branch=branch,
+                dirty=dirty,
+                remote_url=remote_url,
+            )
+        )
+
+    return repo_infos

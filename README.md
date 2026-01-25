@@ -92,7 +92,9 @@ Usage: reposort [OPTIONS] COMMAND [ARGS]...
 
 Commands:
   clone  Clone a repository and organize it by its origin URL.
+  list   List all repositories in a table view.
   sort   Sort existing repositories by their origin URL.
+  tree   Display repositories in a tree view organized by host.
 
 Options:
   --help  Show this message and exit.
@@ -149,6 +151,49 @@ reposort clone git@github.com:user/repo.git --target ~/projects
 ```
 
 This automatically clones to `~/code/github.com/user/repo` (or your custom target), maintaining the same organizational structure as the sort command.
+
+### Viewing Repositories
+
+View your organized repositories with the `list` and `tree` commands:
+
+```bash
+# Table view with host, path, branch, status, and remote URL
+reposort list
+
+# Tree view organized by host
+reposort tree
+
+# View repositories in a custom directory
+reposort list --target ~/projects
+reposort tree --target ~/projects
+```
+
+**Table view (`list`)** shows a detailed table with columns for host, path, branch, status (clean/dirty), and remote URL:
+
+```
+┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Host         ┃ Path           ┃ Branch ┃ Status ┃ Remote URL                ┃
+┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ github.com   │ sthysel/repo   │ main   │ clean  │ git@github.com:sthysel/…  │
+│ github.com   │ other/project  │ develop│ dirty  │ git@github.com:other/pr…  │
+│ gitlab.com   │ team/service   │ main   │ clean  │ git@gitlab.com:team/ser…  │
+└──────────────┴────────────────┴────────┴────────┴───────────────────────────┘
+```
+
+**Tree view (`tree`)** shows a hierarchical view organized by host and owner:
+
+```
+~/code/
+├── github.com/
+│   ├── sthysel/
+│   │   ├── reposort (main, clean)
+│   │   └── dotfiles (master, dirty)
+│   └── other/
+│       └── project (develop, clean)
+└── gitlab.com/
+    └── team/
+        └── service (main, clean)
+```
 
 ## Examples
 

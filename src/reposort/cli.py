@@ -2,12 +2,18 @@
 
 import shutil
 import subprocess
+from collections import defaultdict
 from pathlib import Path
 
 import click
+from rich.console import Console
+from rich.table import Table
+from rich.tree import Tree
 
 from reposort.core import (
+    RepoInfo,
     clone_repository,
+    collect_repo_info,
     find_git_repos,
     get_git_origin_url,
     get_unique_target_path,
@@ -227,6 +233,117 @@ def clone(url: str, target: Path, dry_run: bool, no_fsck: bool) -> None:
     except OSError as e:
         click.echo(f"✗ File system error: {e}", err=True)
         raise click.Abort() from e
+
+
+@cli.command("list")
+@click.option(
+    "--target",
+    type=click.Path(path_type=Path),
+    default=Path("~/code"),
+    help="Base directory containing organized repositories",
+)
+def list_repos(target: Path) -> None:
+    """
+    List all repositories in a table view.
+
+    Shows host, path, branch, status, and remote URL for each repository.
+
+    \b
+    Examples:
+      $ reposort list
+      $ reposort list --target ~/projects
+    """
+    target = target.expanduser().resolve()
+
+    if not target.exists():
+        click.echo(f"Target directory does not exist: {target}", err=True)
+        return
+
+    repos = collect_repo_info(target)
+
+    if not repos:
+        click.echo(f"No git repositories found in {target}")
+        return
+
+    # Sort repos by host, then by path
+    repos.sort(key=lambda r: (r.host, r.repo_path))
+
+    console = Console()
+    table = Table(title=f"Repositories in {target}")
+
+    table.add_column("Host", style="cyan")
+    table.add_column("Path", style="green")
+    table.add_column("Branch", style="yellow")
+    table.add_column("Status", style="magenta")
+    table.add_column("Remote URL", style="dim")
+
+    for repo in repos:
+        status = "[red]dirty[/red]" if repo.dirty else "[green]clean[/green]"
+        branch = repo.branch or "-"
+        remote = repo.remote_url or "-"
+
+        table.add_row(repo.host, repo.repo_path, branch, status, remote)
+
+    console.print(table)
+
+
+@cli.command("tree")
+@click.option(
+    "--target",
+    type=click.Path(path_type=Path),
+    default=Path("~/code"),
+    help="Base directory containing organized repositories",
+)
+def tree_repos(target: Path) -> None:
+    """
+    Display repositories in a tree view organized by host.
+
+    \b
+    Examples:
+      $ reposort tree
+      $ reposort tree --target ~/projects
+    """
+    target = target.expanduser().resolve()
+
+    if not target.exists():
+        click.echo(f"Target directory does not exist: {target}", err=True)
+        return
+
+    repos = collect_repo_info(target)
+
+    if not repos:
+        click.echo(f"No git repositories found in {target}")
+        return
+
+    # Organize repos by host and path hierarchy
+    host_tree: dict[str, dict[str, list[RepoInfo]]] = defaultdict(lambda: defaultdict(list))
+
+    for repo in repos:
+        parts = repo.repo_path.split("/")
+        if len(parts) >= 2:
+            owner = parts[0]
+            host_tree[repo.host][owner].append(repo)
+        else:
+            host_tree[repo.host][""].append(repo)
+
+    console = Console()
+    tree = Tree(f"[bold]{target}[/bold]")
+
+    for host in sorted(host_tree.keys()):
+        host_branch = tree.add(f"[cyan]{host}/[/cyan]")
+        owners = host_tree[host]
+
+        for owner in sorted(owners.keys()):
+            owner_branch = host_branch.add(f"[green]{owner}/[/green]") if owner else host_branch
+
+            for repo in sorted(owners[owner], key=lambda r: r.repo_path):
+                parts = repo.repo_path.split("/")
+                repo_name = parts[-1] if len(parts) > 1 else repo.repo_path
+                branch = repo.branch or "?"
+                status = "[red]dirty[/red]" if repo.dirty else "[green]clean[/green]"
+                owner_branch.add(f"{repo_name} ([yellow]{branch}[/yellow], {status})")
+
+    console.print(tree)
 
 
 if __name__ == "__main__":
