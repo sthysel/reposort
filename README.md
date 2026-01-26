@@ -174,7 +174,7 @@ reposort list --target ~/projects
 reposort tree --target ~/projects
 ```
 
-**Table view (`list`)** shows a detailed table with columns for host, path, branch, status (clean/dirty), and remote URL:
+**Table view (`list`)** shows a table with columns for host, path, branch, status (clean/dirty), and remote URL:
 
 ```
 +--------------+----------------+---------+--------+---------------------------+
@@ -227,11 +227,11 @@ reposort
 Clone directly into organized structure:
 
 ```bash
-# Traditional approach
+# typical
 git clone git@github.com:user/repo.git
 cd repo
 
-# With reposort - automatically organized!
+# With reposort: packed into ~/code/ with dvcs/user/repo
 reposort clone git@github.com:user/repo.git
 cd ~/code/github.com/user/repo
 ```
@@ -276,31 +276,4 @@ just clean
 
 # See all available commands
 just --list
-```
-
-### Manual Commands
-
-Install dependencies:
-
-```bash
-uv sync
-```
-
-Set up pre-commit hooks:
-
-```bash
-pre-commit install
-```
-
-Run type checking:
-
-```bash
-ty check src/reposort
-```
-
-Run formatting and linting:
-
-```bash
-ruff check src/reposort
-ruff format src/reposort
 ```
