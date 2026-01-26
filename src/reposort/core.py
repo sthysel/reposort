@@ -150,7 +150,7 @@ def get_repo_branch(repo_path: Path) -> str | None:
         return None
 
 
-def get_repo_status(repo_path: Path) -> bool:
+def is_dirty(repo_path: Path) -> bool:
     """Check if a git repository has uncommitted changes (is dirty).
 
     Returns True if dirty (uncommitted changes), False if clean.
@@ -194,7 +194,7 @@ def collect_repo_info(base_path: Path) -> list[RepoInfo]:
     for repo in repos:
         remote_url = get_git_origin_url(repo)
         branch = get_repo_branch(repo)
-        dirty = get_repo_status(repo)
+        dirty = is_dirty(repo)
 
         # Try to extract host and path from directory structure
         try:
