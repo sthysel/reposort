@@ -20,9 +20,6 @@ that mirrors the source hosting:
 ~/code/
 ├── aur.archlinux.org/
 │   └── weewx/
-├── bitbucket.org/
-│   ├── bhptechsi/
-│   └── ccgmurdoch/
 ├── github.com/
 │   ├── apple/
 │   ├── astar-ai/
@@ -33,21 +30,6 @@ that mirrors the source hosting:
 │   ├── sthysel-shop/
 │   ├── sthyselzsh/
 │   └── windwp/
-├── gitlab.com/
-│   ├── bhp-cloudfactory/
-│   └── vasdee/
-├── sdappsgit.bhp.com/
-│   ├── iabs/
-│   └── mag/
-├── sdappsgit.ent.bhpbilliton.net/
-│   ├── ddl/
-│   ├── hdl/
-│   ├── ...
-│   ├── scm/
-│   ├── toc/
-│   └── wts/
-└── ssh.dev.azure.com/
-    └── v3/
 ```
 
 This structure makes it easy to:
